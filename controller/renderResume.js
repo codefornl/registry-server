@@ -1,12 +1,9 @@
-var request = require('superagent');
 var Mustache = require('mustache');
 var templateHelper = require('../template-helper');
 var HttpStatus = require('http-status-codes');
-var resumeToText = require('resume-to-text');
-var resumeToMarkdown = require('resume-to-markdown');
+var resumeHelper = require('../lib/resumeHelper')
+
 var Pusher = require('pusher');
-var pdf = require('pdfcrowd');
-var client = new pdf.Pdfcrowd('thomasdavis', '7d2352eade77858f102032829a2ac64e');
 var pusher = null;
 if (process.env.PUSHER_KEY) {
     pusher = new Pusher({
@@ -15,6 +12,7 @@ if (process.env.PUSHER_KEY) {
         secret: process.env.PUSHER_SECRET
     });
 };
+
 var realTimeViews = 0;
 var DEFAULT_THEME = 'modern';
 var Resume = require('../models/resume');
@@ -39,7 +37,7 @@ module.exports = function renderResume(req, res, err) {
         };
     });
 
-    var themeName = req.query.theme || DEFAULT_THEME;
+    var theme = req.query.theme || DEFAULT_THEME;
     var uid = req.params.uid;
     var format = req.params.format || req.headers.accept || 'html';
 
@@ -67,82 +65,21 @@ module.exports = function renderResume(req, res, err) {
             res.send('Password was wrong, go back and try again');
             return;
         }
-        var content = '';
         if (/json/.test(format)) {
-            if (typeof req.session.username === 'undefined') {
-                delete resume.jsonresume; // This removes our registry server config vars from the resume.json
-            }
-            delete resume._id; // This removes the document id of mongo
-            content = JSON.stringify(resume, undefined, 4);
-            res.set({
-                'Content-Type': 'application/json',
-                'Content-Length': Buffer.byteLength(content, 'utf8') // TODO - This is a hack to try get the right content length
-                    // http://stackoverflow.com/questions/17922748/what-is-the-correct-method-for-calculating-the-content-length-header-in-node-js
-            });
-
-            res.send(content);
+            resumeHelper.sendAsJson(resume, res)
+    
         } else if (/txt/.test(format)) {
-            content = resumeToText(resume, function(plainText) {
-                res.set({
-                    'Content-Type': 'text/plain',
-                    'Content-Length': plainText.length
-                });
-                res.send(200, plainText);
-            });
+            resumeHelper.sendAsText(resume, res)
+    
         } else if (/md/.test(format)) {
-          console.log(resume);
-            resumeToMarkdown(resume, function(markdown, errs) {
-              // TODO fix resumeToMarkdown validation errors
-                console.log(markdown, errs);
-                res.set({
-                    'Content-Type': 'text/plain',
-                    'Content-Length': markdown.length
-                });
-                res.send(markdown);
-            })
+            resumeHelper.sendAsMarkdown(resume, res)
+    
         } else if (/pdf/.test(format)) {
-            // this code is used for web-based pdf export such as http://registry.jsonresume.org/thomasdavis.pdf - see line ~310 for resume-cli export
-            console.log('Come on PDFCROWD');
-            var theme = req.query.theme || resume.jsonresume.theme || themeName;
-            request
-                .post('./theme/' + theme)
-                .send({
-                    resume: resume
-                })
-                .set('Content-Type', 'application/json')
-                .end(function(err, response) {
-                    client.convertHtml(response.text, pdf.sendHttpResponse(res, null, uid + ".pdf"), {
-                        use_print_media: "true"
-                    });
-
-                });
-
-
+            resumeHelper.sendAsPdf(resume, theme, res)
+    
         } else {
-            var theme = req.query.theme || resume.jsonresume.theme || themeName;
-            request
-                .post('./theme/' + theme)
-                .send({
-                    resume: resume
-                })
-                .set('Content-Type', 'application/json')
-                .end(function(err, response) {
-                    if (err) res.status(HttpStatus.INTERNAL_SERVER_ERROR).send(err);
-                    else res.send(response.text);
-                });
-            /*
-            resumeToHTML(resume, {
-
-            }, function(content, errs) {
-                console.log(content, errs);
-                var page = Mustache.render(templateHelper.get('layout'), {
-                    output: content,
-                    resume: resume,
-                    username: uid
-                });
-                res.send(content);
-            });
-            */
+            resumeHelper.sendAsHtml(resume, theme, res)
+    
         }
     });
 };

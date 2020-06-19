@@ -95,6 +95,7 @@ app.get('/pdf', function(req, res) {
         });
 });
 
+app.get('/resume', controller.renderRemoteResume)
 app.get('/:uid.:format', controller.renderResume);
 app.get('/:uid', controller.renderResume);
 app.post('/resume', controller.upsertResume);
