@@ -1,0 +1,36 @@
+kind: Service
+apiVersion: v1
+metadata:
+  name: jsonresume-service
+spec:
+  selector:
+    app: jsonresume
+  type: NodePort
+  ports:
+    - protocol: TCP
+      port: 5000
+      targetPort: 5000
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: jsonresume
+  labels:
+    app: jsonresume
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: jsonresume
+  template:
+    metadata:
+      labels:
+        app: jsonresume
+    spec:
+      imagePullSecrets:
+      - name: pipeline-docker-registry
+      containers:
+      - name: jsonresume
+        image: ${CICD_IMAGE}:${CICD_EXECUTION_SEQUENCE}
+        ports:
+        - containerPort: 5000
