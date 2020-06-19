@@ -30,7 +30,7 @@
     "http-status-codes": "^1.0.5",
     "lodash": "^4.17.10",
     "mongodb": "~2.2.26",
-    "mongoose": "^4.13",
+    "mongoose": "^4.13.19",
     "mustache": "^2.3.0",
     "newrelic": "^1.26.2",
     "pdfcrowd": "^1.1.1",
@@ -42,7 +42,8 @@
     "resume-to-markdown": "0.0.14",
     "resume-to-text": "0.0.15",
     "sha256": "^0.2.0",
-    "superagent": "^3.8"
+    "superagent": "^3.8",
+    "tarball-extract": "0.0.6"
   },
   "devDependencies": {
     "chai": "^3.3.0",

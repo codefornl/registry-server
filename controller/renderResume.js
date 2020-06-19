@@ -105,7 +105,7 @@ module.exports = function renderResume(req, res, err) {
             console.log('Come on PDFCROWD');
             var theme = req.query.theme || resume.jsonresume.theme || themeName;
             request
-                .post('https://themes.jsonresume.org/theme/' + theme)
+                .post('/theme/' + theme)
                 .send({
                     resume: resume
                 })
@@ -121,7 +121,7 @@ module.exports = function renderResume(req, res, err) {
         } else {
             var theme = req.query.theme || resume.jsonresume.theme || themeName;
             request
-                .post('https://themes.jsonresume.org/theme/' + theme)
+                .post('./theme/' + theme)
                 .send({
                     resume: resume
                 })

@@ -1,11 +1,12 @@
-// require('dotenv').load();
+require('dotenv').load();
 require('./lib/mongoose-connection');
 var redis = require('./lib/redis-connection');
+var theme = require('./lib/theme')
 var express = require("express");
-var path = require('path');
+
 var bodyParser = require('body-parser');
 var pdf = require('pdfcrowd');
-var client = new pdf.Pdfcrowd('thomasdavis', '7d2352eade77858f102032829a2ac64e');
+var client = new pdf.Pdfcrowd(process.env.PDFCROWD_USER || 'thomasdavis', process.env.PDFCROWD_KEY || '7d2352eade77858f102032829a2ac64e');
 var app = express();
 var request = require('superagent');
 var expressSession = require('express-session');
@@ -14,7 +15,6 @@ var compress = require('compression');
 var minify = require('express-minify');
 var controller = require('./controller');
 
-var points = [];
 var DEFAULT_THEME = 'modern';
 
 var RedisStore = require('connect-redis')(expressSession);
@@ -29,7 +29,9 @@ app.use(expressSession({
     store: new RedisStore({
         client: redis
     }),
-    secret: 'keyboard cat'
+    secret: 'keyboard cat',
+    resave: true,
+    saveUninitialized: true
 }));
 //app.use(expressSession({secret:'somesecrettokenhere'}));
 
@@ -57,6 +59,10 @@ function S4() {
         .substring(1);
 };
 
+app.use("/themes.json", express.static('themes.json'));
+app.get('/theme/:theme', theme);
+app.post('/theme/:theme', theme);
+
 app.all('/*', function(req, res, next) {
     //res.header("Access-Control-Allow-Origin", "*");
     //res.header("Access-Control-Allow-Headers", "X-Requested-With");
@@ -68,6 +74,8 @@ app.all('/*', function(req, res, next) {
     next();
 });
 
+
+
 app.get('/session', controller.checkSession);
 app.delete('/session/:id', controller.deleteSession);
 app.get('/members', controller.renderMembersPage);
@@ -77,7 +85,7 @@ app.get('/stats', controller.showStats);
 app.get('/pdf', function(req, res) {
     console.log(req.body.resume, req.body.theme);
     request
-        .post('https://themes.jsonresume.org/theme/' + req.body.theme)
+        .post('./theme/' + req.body.theme)
         .send({
             resume: req.body.resume
         })

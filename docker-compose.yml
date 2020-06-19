@@ -1,0 +1,45 @@
+version: "3.1"
+services:
+  mongodb:
+    image: mongo:3-xenial
+    ports:
+      - "27017:27017"
+    networks:
+      - registry_server_network
+    volumes:
+      - mongodata:/data/db
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+
+  redis:
+    image: redis:6-alpine
+    ports:
+      - "6379:6379"
+    networks:
+      - registry_server_network
+    volumes:
+      - redisdata:/data
+
+  app:
+    build: .
+    depends_on:
+      - mongodb
+      - redis
+    environment:
+      - POSTMARK_API_KEY=1234567889
+      - MONGOHQ_URL=mongodb://root:example@127.0.0.1:27017
+      - REDISTOGO_URL=redis:6379
+    ports:
+      - "8030:3000"
+      - "8050:5000"
+    networks:
+      - registry_server_network
+
+volumes:
+  mongodata: {}
+  redisdata: {}
+
+networks:
+  registry_server_network:
+    driver: bridge

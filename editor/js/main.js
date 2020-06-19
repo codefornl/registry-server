@@ -36,7 +36,7 @@ jQuery(document).ready(function($) {
 			type: "POST",
 			contentType: "application/json",
 			data: JSON.stringify({resume: data}, null, "  "),
-			url: "https://themes.jsonresume.org/" + theme,
+			url: "./theme/" + theme,
 			success: function(html) {
 				iframe.contents().find("body").html(html);
 				preview.removeClass("loading");
@@ -82,7 +82,7 @@ jQuery(document).ready(function($) {
 	(function getThemes() {
 		var list = $("#themes-list");
 		var item = list.find(".item").remove();
-		$.getJSON("https://themes.jsonresume.org/themes.json", function(json) {
+		$.getJSON("./themes.json", function(json) {
 			var themes = json.themes;
 			if (!themes) {
 				return;
