@@ -74,8 +74,6 @@ app.all('/*', function(req, res, next) {
     next();
 });
 
-
-
 app.get('/session', controller.checkSession);
 app.delete('/session/:id', controller.deleteSession);
 app.get('/members', controller.renderMembersPage);

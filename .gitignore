@@ -3,6 +3,11 @@ npm-debug.log
 .vagrant
 cache/*
 
+# Theme cache
+themes/
+tmp/
+themes.json
+
 # Environment
 .env*
 !.env.example
