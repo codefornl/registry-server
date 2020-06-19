@@ -1,5 +1,5 @@
 require('dotenv').load();
-require('./lib/mongoose-connection');
+
 var redis = require('./lib/redis-connection');
 var theme = require('./lib/theme')
 var express = require("express");

@@ -1,7 +1,13 @@
+//@ts-check
 var request = require('superagent');
 var resumeHelper = require('../lib/resumeHelper')
 
-module.exports = function renderRemoteResume(req, res, err) {
+/**
+ * @param {{ query: { theme: any; url: any; format: any; }; headers: { accept: any; }; }} req
+ * @param {any} res
+ * @param {any} next
+ */
+const renderRemoteResume = (req, res, next) => {
     var themeName = req.query.theme;
     var resumeUrl = req.query.url;
     var format = req.query.format || req.headers.accept || 'html';
@@ -19,3 +25,4 @@ module.exports = function renderRemoteResume(req, res, err) {
 
 };
 
+module.exports = renderRemoteResume
