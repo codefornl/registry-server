@@ -4,9 +4,13 @@ var bcrypt = require('bcrypt-nodejs')
 var Mustache = require('mustache')
 var User = require('../models/user')
 
+/**
+ * @param {{ body: { email: any; username: any; password: string; }; session: { username: any; email: any; }; }} req
+ * @param {{ status: (arg0: number) => { (): any; new (): any; json: { (arg0: { error?: { field: string; message: string; } | { field: string; message: string; }; email?: any; username?: any; message?: string; }): void; new (): any; }; }; }} res
+ * @param {(arg0: any) => void} next
+ */
 const userController = (req, res, next) => {
     console.log('hit the user controller')
-    // console.log(req.body)
     User.findOne({
         'email': req.body.email
     }, (err, user) => {
@@ -39,6 +43,9 @@ const userController = (req, res, next) => {
                     const hash = bcrypt.hashSync(req.body.password)
                     try {
                         const postmark = require("postmark")(process.env.POSTMARK_API_KEY)
+                        /**
+                         * @param {{ message: string; }} error
+                         */
                         postmark.send({
                             "From": "admin@jsonresume.org",
                             "To": req.body.email,
@@ -60,6 +67,10 @@ const userController = (req, res, next) => {
                         hash: hash
                     }
 
+                    /**
+                     * @param {any} err
+                     * @param {{ username: any; email: any; }} user
+                     */
                     User.create(newUser, (err, user) => {
 
                         console.log(err, user, 'create error')

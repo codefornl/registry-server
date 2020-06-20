@@ -1,4 +1,3 @@
-process.env.MONGOHQ_URL = 'mongodb://localhost:27017/jsonresume-tests';
 var request = require('supertest')(require('../../server'));
 var bcrypt = require('bcrypt-nodejs');
 var should = require('should');

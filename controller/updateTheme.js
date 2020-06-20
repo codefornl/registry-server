@@ -2,22 +2,21 @@ var bcrypt = require('bcrypt-nodejs');
 var User = require('../models/user');
 var Resume = require('../models/resume');
 
-module.exports = function updateTheme(req, res, next) {
+const updateTheme = (req, res) => {
 
-    var db = req.db;
-    var redis = req.redis;
+    var db = req.db
+    var redis = req.redis
 
-    var password = req.body.password;
-    var email = req.body.email;
-    var theme = req.body.theme;
-    console.log(theme, "theme update!!!!!!!!!!!!1111");
-    // console.log(req.body);
+    var password = req.body.password
+    var email = req.body.email
+    var theme = req.body.theme
+    console.info(theme, "theme update starting");
     User.findOne({
         'email': email
     }, function(err, user) {
 
-        redis.get(req.body.session, function(err, valueExists) {
-            console.log(err, valueExists, 'theme redis');
+        redis.get(req.body.session, (err, valueExists) => {
+            console.error(err, valueExists, 'theme redis');
 
             if (!valueExists && user && bcrypt.compareSync(password, user.hash)) {
 
@@ -44,7 +43,7 @@ module.exports = function updateTheme(req, res, next) {
                 }, {
                     // update set new theme
                     'jsonresume.theme': theme
-                }, function(err, resume) {
+                }, (err, resume) => {
                     res.send({
                         url: 'https://registry.jsonresume.org/' + user.username
                     });
@@ -60,3 +59,5 @@ module.exports = function updateTheme(req, res, next) {
     });
 
 }
+
+module.exports = updateTheme

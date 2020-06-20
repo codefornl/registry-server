@@ -1,8 +1,8 @@
 //@ts-check
-var mongoose = require('../lib/mongoose-connection');
-var Schema = mongoose.Schema;
+var mongoose = require('../lib/mongoose-connection')
+var Schema = mongoose.Schema
 
-var userSchema = new Schema({
+const userSchema = new Schema({
   username: {
     type: String,
     required: true
@@ -16,7 +16,6 @@ var userSchema = new Schema({
   hash: { // TODO make virtual
     type: String
   }
-});
-
+})
 
 module.exports = mongoose.model('User', userSchema);

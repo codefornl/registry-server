@@ -17,6 +17,6 @@ module.exports = function checkSession(req, res) {
         res.send({
             auth: false,
             _csrf: req.session._csrf
-        });
+        })
     }
-};
+}

@@ -12,21 +12,14 @@ module.exports = function createSession(req, res, next) {
 
     var password = req.body.password;
     var email = req.body.email;
-    // console.log(req.body);
     User.findOne({
         'email': email
     }, function(err, user) {
 
         if (user && bcrypt.compareSync(password, user.hash)) {
-            // console.log(email, bcrypt.hashSync(email));
-            // console.log(email, bcrypt.hashSync(email));
             var sessionUID = uid(32);
 
             redis.set(sessionUID, true, redis.print);
-
-
-
-            // var session = value.toString();
 
             req.session.username = user.username;
             req.session.email = email;

@@ -1,27 +1,39 @@
-var User = require('../models/user');
-var Resume = require('../models/resume');
+///@ts-check
+const User = require('../models/user')
+const Resume = require('../models/resume')
 
-module.exports = function stats(req, res, next) {
+/**
+ * @param {{ redis: any; }} req
+ * @param {{ send: (arg0: { userCount: number; resumeCount: number; views: number; }) => void; }} res
+ * @param {(arg0: any) => void} next
+ */
+const stats = (req, res, next) => {
 
-    var redis = req.redis
+    const redis = req.redis
 
-    redis.get('views', function(err, views) {
-        User.count({}, function(err, usercount) {
+    /**
+     * @param {Error} err
+     * @param {number} views
+     */
+    redis.get('views', (err, views) => {
+        User.count({}, (err, usercount) => {
             if (err) {
                 return next(err);
             }
 
-            Resume.count({}, function(err, resumecount) {
+            Resume.count({}, (err, resumecount) => {
                 if (err) {
-                    return next(err);
+                    return next(err)
                 }
 
                 res.send({
                     userCount: usercount,
                     resumeCount: resumecount,
                     views: views * 1
-                });
-            });
-        });
-    });
-};
+                })
+            })
+        })
+    })
+}
+
+module.exports = stats
