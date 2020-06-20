@@ -13,7 +13,7 @@ const cookieParser = require('cookie-parser')
 const compress = require('compression')
 const minify = require('express-minify')
 const controller = require('./controller')
-const theme = require('./lib/themeHelper').controller
+const theme = require('./lib/themeHelper')
 const DEFAULT_THEME = 'modern'
 
 const RedisStore = require('connect-redis')(expressSession)
@@ -39,9 +39,9 @@ app.use(express.static(__dirname + '/editor', {
 }))
 
 app.use(bodyParser());
-app.get('/themes.json', theme.info)
-app.get('/theme/:theme', theme.theme)
-app.post('/theme/:theme', theme.theme)
+app.get('/themes.json', theme.controllers.info)
+app.get('/theme/:theme', theme.controllers.theme)
+app.post('/theme/:theme', theme.controllers.theme)
 
 app.all('/*', (req, res, next) => {
     //res.header("Access-Control-Allow-Origin", "*");
