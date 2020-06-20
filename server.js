@@ -2,7 +2,7 @@
 require('dotenv').load()
 
 const redis = require('./lib/redis-connection')
-const theme = require('./lib/theme')
+
 const express = require("express")
 
 const bodyParser = require('body-parser')
@@ -13,7 +13,7 @@ const cookieParser = require('cookie-parser')
 const compress = require('compression')
 const minify = require('express-minify')
 const controller = require('./controller')
-const themeHandler = require('./lib/themeHelper')
+const theme = require('./lib/themeHelper').controller
 const DEFAULT_THEME = 'modern'
 
 const RedisStore = require('connect-redis')(expressSession)
@@ -39,9 +39,9 @@ app.use(express.static(__dirname + '/editor', {
 }))
 
 app.use(bodyParser());
-app.get('/themes.json', themeHandler.controllers.info)
-app.get('/theme/:theme', theme)
-app.post('/theme/:theme', theme)
+app.get('/themes.json', theme.info)
+app.get('/theme/:theme', theme.theme)
+app.post('/theme/:theme', theme.theme)
 
 app.all('/*', (req, res, next) => {
     //res.header("Access-Control-Allow-Origin", "*");
@@ -53,7 +53,7 @@ app.all('/*', (req, res, next) => {
      * 
      * TODO find a better way
      */
-    
+
     // @ts-ignore
     req.redis = redis;
     next()
@@ -68,11 +68,11 @@ app.get('/stats', controller.showStats)
  * Export pdf route
  * this code is used by resume-cli for pdf export,
  * see line ~188 for web-based export
- */ 
+ */
 app.get('/pdf', (req, res) => {
     const pdf = require('pdfcrowd')
     const client = new pdf.Pdfcrowd(
-        process.env.PDFCROWD_USER || 'thomasdavis', 
+        process.env.PDFCROWD_USER || 'thomasdavis',
         process.env.PDFCROWD_KEY || '7d2352eade77858f102032829a2ac64e',
         null
     )

@@ -19,7 +19,6 @@ module.exports = function deleteUser(req, res, next) {
                 message: '\nemail not found'
             });
         } else if (user && bcrypt.compareSync(password, user.hash)) {
-            // console.log(req.body);
 
             //remove the users resume
             Resume.remove({

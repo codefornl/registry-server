@@ -36,7 +36,7 @@ const updateTheme = (req, res) => {
                     sessionError: 'invalid session'
                 });
             } else if (valueExists === 'true') {
-                console.log('redis session success');
+                console.info('redis session success');
                 Resume.update({
                     //query
                     'jsonresume.username': user.username
@@ -50,7 +50,7 @@ const updateTheme = (req, res) => {
                 });
 
             } else {
-                console.log('deleted');
+                console.info('deleted');
                 res.send({
                     message: 'authentication error'
                 });

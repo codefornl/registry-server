@@ -10,7 +10,6 @@ var User = require('../models/user')
  * @param {(arg0: any) => void} next
  */
 const userController = (req, res, next) => {
-    console.log('hit the user controller')
     User.findOne({
         'email': req.body.email
     }, (err, user) => {
@@ -28,7 +27,7 @@ const userController = (req, res, next) => {
                 'username': req.body.username
             }, (err, user) => {
                 if (user) {
-                    res.status(409).json({ 
+                    res.status(409).json({
                         // HTTP Status 409 Conflict
                         error: {
                             field: 'username',
@@ -59,7 +58,7 @@ const userController = (req, res, next) => {
                             console.info("Sent to postmark for delivery")
                         })
                     } catch (err) {
-                        console.log("Postmark is not available, the system will not be able to send email")
+                        console.error("Postmark is not available, the system will not be able to send email")
                     }
                     const newUser = {
                         username: req.body.username,
@@ -73,16 +72,15 @@ const userController = (req, res, next) => {
                      */
                     User.create(newUser, (err, user) => {
 
-                        console.log(err, user, 'create error')
+                        console.error(err, user, 'create error')
                         if (err) {
                             return next(err)
                         }
 
                         req.session.username = user.username
                         req.session.email = user.email
-                        // console.log('USER CREATED', req.session, req.session.username)
-                        res.status(201).json({ // HTTP status 201 created
-                            // username: user.username,
+                        // HTTP status 201 created
+                        res.status(201).json({
                             email: user.email,
                             username: user.username,
                             message: "success"
