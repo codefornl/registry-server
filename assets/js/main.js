@@ -111,10 +111,6 @@ $(function() {
         }, 200);
     });
 
-    $("#export, #save").tooltip({
-        container: "body"
-    });
-
     edit.on("input", "input, textarea", function() {
         update();
     });

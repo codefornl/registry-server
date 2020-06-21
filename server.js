@@ -1,7 +1,7 @@
 //@ts-check
 require('dotenv').load()
 
-const redis = require('./lib/redis-connection')
+//const redis = require('./lib/redis-connection')
 
 const express = require("express")
 
@@ -16,7 +16,7 @@ const controller = require('./controller')
 const theme = require('./lib/themeHelper')
 const DEFAULT_THEME = 'modern'
 
-const RedisStore = require('connect-redis')(expressSession)
+//const RedisStore = require('connect-redis')(expressSession)
 
 app.use(compress());
 app.use(minify({
@@ -24,21 +24,22 @@ app.use(minify({
 }))
 app.use(require('./middleware/allow-cross-domain'))
 app.use(cookieParser())
-app.use(expressSession({
-    store: new RedisStore({
-        client: redis
-    }),
-    secret: 'keyboard cat',
-    resave: true,
-    saveUninitialized: true
-}))
+// app.use(expressSession({
+//     store: new RedisStore({
+//         client: redis
+//     }),
+//     secret: 'keyboard cat',
+//     resave: true,
+//     saveUninitialized: true
+// }))
 //app.use(expressSession({secret:'somesecrettokenhere'}));
 
 app.use(express.static(__dirname + '/editor', {
     maxAge: 21600 * 1000
 }))
 
-app.use(bodyParser());
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded());
 app.get('/themes.json', theme.controllers.info)
 app.get('/theme/:theme', theme.controllers.theme)
 app.post('/theme/:theme', theme.controllers.theme)
@@ -55,14 +56,14 @@ app.all('/*', (req, res, next) => {
      */
 
     // @ts-ignore
-    req.redis = redis;
+    //req.redis = redis;
     next()
 })
 
-app.get('/session', controller.checkSession)
-app.delete('/session/:id', controller.deleteSession)
-app.get('/members', controller.renderMembersPage)
-app.get('/stats', controller.showStats)
+//app.get('/session', controller.checkSession)
+//app.delete('/session/:id', controller.deleteSession)
+//app.get('/members', controller.renderMembersPage)
+//app.get('/stats', controller.showStats)
 
 /**
  * Export pdf route
@@ -90,14 +91,14 @@ app.get('/pdf', (req, res) => {
 })
 
 app.get('/resume', controller.renderRemoteResume)
-app.get('/:uid.:format', controller.renderResume)
-app.get('/:uid', controller.renderResume)
-app.post('/resume', controller.upsertResume)
-app.put('/resume', controller.updateTheme)
-app.post('/user', controller.createUser)
-app.post('/session', controller.createSession)
-app.put('/account', controller.changePassword)
-app.delete('/account', controller.deleteUser)
+//app.get('/:uid.:format', controller.renderResume)
+//app.get('/:uid', controller.renderResume)
+//app.post('/resume', controller.upsertResume)
+//app.put('/resume', controller.updateTheme)
+//app.post('/user', controller.createUser)
+//app.post('/session', controller.createSession)
+//app.put('/account', controller.changePassword)
+//app.delete('/account', controller.deleteUser)
 app.post('/:uid', controller.renderResume)
 
 process.addListener('uncaughtException', (err) => {

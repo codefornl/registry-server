@@ -1,6 +1,7 @@
 <!doctype html>
 <html>
-	<head>
+
+<head>
 
 	<meta charset="utf-8">
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -13,8 +14,9 @@
 
 	<link rel="shortcut icon" href="favicon.png">
 
-	</head>
-	<body class="preload">
+</head>
+
+<body class="preload">
 
 	<textarea id="output" style="display: none;"></textarea>
 
@@ -23,7 +25,8 @@
 			<div class="actions">
 				<div class="pull-right">
 					<button id="export" class="button" data-placement="bottom" title="Download JSON"></button>
-					<button id="save-button" class="button" data-placement="bottom" title="Publish to jsonresume.org">Publish</button>
+					<button id="save-button" class="button" data-placement="bottom"
+						title="Publish to jsonresume.org">Publish</button>
 				</div>
 				<button id="login-button" class="button" style="display: none;">Login</button>
 				<button id="register-button" class="button" style="display: none;">Register</button>
@@ -302,65 +305,70 @@
 	<!-- MODALS -->
 
 	<!-- REGISTER MODAL -->
-		<div class="modal " id="register-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
-		  <div class="modal-dialog" style="width: 400px;">
-		  	<form class="register-form">
-		    <div class="modal-content">
-		      <div class="modal-header">
-		        <h4 class="modal-title" id="myModalLabel">Register an Account</h4>
-		      </div>
-		      <div class="modal-body">
-		        <input type="text" class="form-control register-email" placeholder="Email" required autofocus><br />
-		        <input type="text" class="form-control register-username" placeholder="Username" required><br />
-                <input type="password" class="form-control register-password" placeholder="Password" required>
-		      </div>
-		      <div class="modal-footer">
-					<button type="submit" class="button">Register</button>
+	<div class="modal " id="register-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+		aria-hidden="false">
+		<div class="modal-dialog" style="width: 400px;">
+			<form class="register-form">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h4 class="modal-title" id="myModalLabel">Register an Account</h4>
+					</div>
+					<div class="modal-body">
+						<input type="text" class="form-control register-email" placeholder="Email" required
+							autofocus><br />
+						<input type="text" class="form-control register-username" placeholder="Username" required><br />
+						<input type="password" class="form-control register-password" placeholder="Password" required>
+					</div>
+					<div class="modal-footer">
+						<button type="submit" class="button">Register</button>
 
-		      </div>
-		    </div>
-		    </form>
-		  </div>
+					</div>
+				</div>
+			</form>
 		</div>
+	</div>
 	<!-- REGISTER MODAL -->
 
 	<!-- LOGIN MODAL -->
 	<div class="modal " id="login-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
 
-	  <div class="modal-dialog" style="width: 400px;">
-	  	<form class="login-form">
-	    <div class="modal-content">
-	      <div class="modal-header">
-	        <h4 class="modal-title" id="myModalLabel">Login to your Account</h4>
-	      </div>
-	      <div class="modal-body">
-	        <input type="text" class="form-control login-email" value="thomasalwyndavis@gmail.com" placeholder="Email" required autofocus><br />
-            <input type="password" class="form-control login-password" placeholder="Password" value="" required>
-	      </div>
-	      <div class="modal-footer">
-				<button type="submit" class="button">Login</button>
+		<div class="modal-dialog" style="width: 400px;">
+			<form class="login-form">
+				<div class="modal-content">
+					<div class="modal-header">
+						<h4 class="modal-title" id="myModalLabel">Login to your Account</h4>
+					</div>
+					<div class="modal-body">
+						<input type="text" class="form-control login-email" value="thomasalwyndavis@gmail.com"
+							placeholder="Email" required autofocus><br />
+						<input type="password" class="form-control login-password" placeholder="Password" value=""
+							required>
+					</div>
+					<div class="modal-footer">
+						<button type="submit" class="button">Login</button>
+					</div>
+				</div>
+			</form>
 
-	      </div>
-           </form>
-
-	    </div>
-	  </div>
+		</div>
+	</div>
 	</div>
 
 	<!-- LOGIN MODAL -->
-	<div class="modal " id="publish-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="false">
+	<div class="modal " id="publish-modal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+		aria-hidden="false">
 
-	  <div class="modal-dialog" style="width: 400px;">
-	    <div class="modal-content">
-	      <div class="modal-header">
-	        <h4 class="modal-title" id="myModalLabel">Publish</h4>
-	      </div>
-	      <div class="modal-body">
-	       <p>Publishing...</p>
-	      </div>
+		<div class="modal-dialog" style="width: 400px;">
+			<div class="modal-content">
+				<div class="modal-header">
+					<h4 class="modal-title" id="myModalLabel">Publish</h4>
+				</div>
+				<div class="modal-body">
+					<p>Publishing...</p>
+				</div>
 
-	    </div>
-	  </div>
+			</div>
+		</div>
 	</div>
 	<!-- LOGIN MODAL -->
 
@@ -374,5 +382,6 @@
 	<script src="js/download.js"></script>
 	<script src="js/main.js"></script>
 
-	</body>
+</body>
+
 </html>
